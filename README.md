@@ -26,7 +26,7 @@ Then use [auto-py-to-exe](https://pypi.org/project/auto-py-to-exe)
 Compile settings:
 ```
 Script Location:
-srd/main.py
+src/main.py
 
 Onefile:
 One Directory
@@ -49,5 +49,7 @@ src/offline_data/offline_data
 
 --name: PenguinMod Desktop
 ```
+
+If you don't want to compile it yourself, you can check the [releases](https://github.com/pooiod/DesktopPenguinmod/releases) tab
 
 <sub>- This project is not affiliated with PenguinMod or Scratch</sub>
