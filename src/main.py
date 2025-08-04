@@ -202,7 +202,7 @@ class Window(QMainWindow):
         self.setCentralWidget(self.view)
         self.setWindowIcon(QIcon(ICON_PATH))
         self.setWindowTitle("PenguinMod Desktop")
-        self.resize(1524, 968)
+        self.resize(1824, 968)
         self.setMinimumSize(1024, 768)
         if not parent:
             self.view.load("https://studio.penguinmod.com/editor.html")

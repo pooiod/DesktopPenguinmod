@@ -4,6 +4,8 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl, QTimer, Qt
 from PyQt5.QtGui import QIcon
 
+os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = "--disk-cache-size=1073741824 --disable-features=NetworkServiceInProcess --enable-features=NetworkService,CacheStorage,WebGLImageChromium --host-rules=*99"
+
 shutil.rmtree(os.path.join(os.path.dirname(__file__),"offline_data"), ignore_errors=True)
 app = QApplication(sys.argv)
 
