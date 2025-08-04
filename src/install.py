@@ -147,7 +147,8 @@ class Downloader:
         self.label.setText("Download Complete!")
         self.progress_bar_current.setValue(100)
         self.progress_bar_total.setValue(self.total_files)
-        QTimer.singleShot(1500, self.app.quit)
+        # QTimer.singleShot(1500, self.app.quit)
+        QTimer.singleShot(1500, mainWindow.close)
 
 mainWindow.show()
 loader.setGeometry(0, 0, mainWindow.width(), mainWindow.height())

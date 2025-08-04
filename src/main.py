@@ -27,6 +27,7 @@ def RunProgram(file):
         finally:
             sys.exit = old_exit
 
+# the installer is build into the program
 if not os.path.exists(CACHE_PATH):
     RunProgram('install.py')
 
