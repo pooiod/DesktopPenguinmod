@@ -5,12 +5,14 @@ from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor, QWebEngineHtt
 from PyQt5.QtCore import QUrl, QTimer, QProcess, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 
+# some things will not load if I enable web security
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-web-security --allow-running-insecure-content --disable-site-isolation-trials --disable-features=CrossOriginOpenerPolicy,CrossOriginEmbedderPolicy --user-data-dir=/tmp/pm_chromium"
 
 DOMAINS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "domains.json")
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "offline_data")
 ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "icon.ico")
 
+# this function was anoying to figure out
 def RunProgram(file):
     def fake_exit(code=0):
         raise SystemExit(code)
@@ -25,7 +27,6 @@ def RunProgram(file):
         finally:
             sys.exit = old_exit
 
-# The installer is build into the application
 if not os.path.exists(CACHE_PATH):
     RunProgram('install.py')
 
@@ -38,12 +39,9 @@ class WebPage(QWebEnginePage):
         self._session_permissions = {}
         self.featurePermissionRequested.connect(self.on_feature_permission_requested)
         self.windowCloseRequested.connect(self.window_close_requested)
+        self.loadFinished.connect(self.on_load_finished)
 
-    # This function is known to crash
     def on_feature_permission_requested(self, url, feature):
-        if feature == QWebEnginePage.Clipboard:
-            self.setFeaturePermission(url, feature, QWebEnginePage.PermissionGrantedByUser)
-            return
         origin_str = f"{url.scheme()}://{url.host()}"
         if url.port() != -1:
             origin_str += f":{url.port()}"
@@ -61,7 +59,7 @@ class WebPage(QWebEnginePage):
             QWebEnginePage.DesktopAudioVideoCapture: "capture your screen and audio",
             QWebEnginePage.MouseLock: "lock your mouse cursor",
         }
-        question = f"Allow {origin_str} to {feature_map.get(feature, 'use this feature')}?"
+        question = f"Do you want to allow this project to {feature_map.get(feature, 'use this feature')}?"
         msg = QMessageBox(self.view().window())
         msg.setIcon(QMessageBox.Question)
         msg.setWindowTitle("Permission")
@@ -71,6 +69,9 @@ class WebPage(QWebEnginePage):
         permission = QWebEnginePage.PermissionGrantedByUser if msg.exec_() == QMessageBox.Yes else QWebEnginePage.PermissionDeniedByUser
         self.setFeaturePermission(url, feature, permission)
         self._session_permissions[permission_key] = permission
+
+    def on_load_finished(self, ok):
+        self._session_permissions.clear()
 
     def window_close_requested(self):
         self.parent().close()
@@ -95,13 +96,15 @@ class WebPage(QWebEnginePage):
         return text if ok else ""
 
 class OfflineInterceptor(QWebEngineUrlRequestInterceptor):
+    # any domain in the whiteist will be stored for offline use
     def interceptRequest(self, info):
         host = info.requestUrl().host()
         allowed = any(host == d or host.endswith("." + d) for d in WHITELIST)
-        info.setHttpHeader(b"Cache-Control", b"max-age=31536000" if allowed else b"no-store")
+        info.setHttpHeader(b"Cache-Control", b"max-age=3122064000" if allowed else b"no-store") # I don't think most people will be using this program for 99 years
 
 def inject_script(profile):
     # polyfill script to add functions that Penguinmod needs to function
+    # this is not directly in script.js because it counts as a browser fix
     polyfill = """
     if(!String.prototype.replaceAll){
         String.prototype.replaceAll=function(s,r){
@@ -132,6 +135,7 @@ def inject_script(profile):
         };
     }
     """
+    # also add script.js because cool features
     path = os.path.join(os.path.dirname(__file__), "script.js")
     code = polyfill + open(path).read() if os.path.exists(path) else polyfill
     s = QWebEngineScript()

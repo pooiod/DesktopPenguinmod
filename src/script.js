@@ -306,9 +306,9 @@ if (window.location.host == "studio.penguinmod.com") {
         }, 100);
     }
 } else {
-    // Add a loader for scratch so it is not just a blank page of purple
     if (window.location.host == "scratch.mit.edu") {
         (function() {
+            // Add a loader for scratch so it is not just a blank page of purple
             const loader5676 = document.createElement('div');
             loader5676.style.position = 'fixed';
             loader5676.style.top = '50%';
@@ -331,44 +331,42 @@ if (window.location.host == "studio.penguinmod.com") {
                     loader5676.remove();
                 }
             }, 1000);
+
+            // A script to make f=a=>a*a functions work because PyQt5 does not like minification
+            var script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@babel/standalone@7.21.0/babel.min.js';
+            script.onload = function() {
+                console.log("Compiling scripts...");
+                var scripts = document.querySelectorAll('script[type="text/babel"]');
+                scripts.forEach(function(script) {
+                    var code = script.textContent;
+                    var transpiledCode = Babel.transform(code, {
+                        presets: ['env']
+                    }).code;
+                    var newScript = document.createElement('script');
+                    newScript.textContent = transpiledCode;
+                    document.body.appendChild(newScript);
+                });
+
+                var externalScripts = document.querySelectorAll('script[src]');
+                externalScripts.forEach(function(script) {
+                    var url = script.src;
+                    fetch(url)
+                        .then(response => response.text())
+                        .then(code => {
+                            var transpiledCode = Babel.transform(code, {
+                                presets: ['env']
+                            }).code;
+                            var newScript = document.createElement('script');
+                            newScript.textContent = transpiledCode;
+                            document.body.appendChild(newScript);
+                        })
+                        .catch(error => console.error('Error loading external script:', error));
+                });
+
+                console.log("Scripts compiled.");
+            };
+            document.head.appendChild(script);
         })();
     }
-
-    // Old ahh browser fix
-    (function() {
-        var script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/@babel/standalone@7.21.0/babel.min.js';
-        script.onload = function() {
-            console.log("Compiling scripts...");
-            var scripts = document.querySelectorAll('script[type="text/babel"]');
-            scripts.forEach(function(script) {
-                var code = script.textContent;
-                var transpiledCode = Babel.transform(code, {
-                    presets: ['env']
-                }).code;
-                var newScript = document.createElement('script');
-                newScript.textContent = transpiledCode;
-                document.body.appendChild(newScript);
-            });
-
-            var externalScripts = document.querySelectorAll('script[src]');
-            externalScripts.forEach(function(script) {
-                var url = script.src;
-                fetch(url)
-                    .then(response => response.text())
-                    .then(code => {
-                        var transpiledCode = Babel.transform(code, {
-                            presets: ['env']
-                        }).code;
-                        var newScript = document.createElement('script');
-                        newScript.textContent = transpiledCode;
-                        document.body.appendChild(newScript);
-                    })
-                    .catch(error => console.error('Error loading external script:', error));
-            });
-
-            console.log("Scripts compiled.");
-        };
-        document.head.appendChild(script);
-    })();
 }
