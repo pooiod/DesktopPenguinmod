@@ -1,0 +1,89 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": false
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/icon.ico"
+  },
+  {
+   "optionDest": "name",
+   "value": "PenguinMod Desktop"
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/domains.json;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/icon.ico;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/install.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/manager.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/script.js;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "E:/Projects/python/PenguinMod Desktop/src/offline_data;offline_data/"
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}
