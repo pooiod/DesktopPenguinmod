@@ -236,7 +236,18 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     profile = QWebEngineProfile("sharedProfile")
     profile.setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.144 Safari/537.36")
-    profile.setCachePath(CACHE_PATH)
+
+    persistent_data_path = os.path.join(os.getenv('APPDATA'), 'DesktopPenguin')
+
+    cache_path = os.path.join(persistent_data_path, "Cache")
+
+    os.makedirs(persistent_data_path, exist_ok=True)
+    os.makedirs(cache_path, exist_ok=True)
+
+    profile.setCachePath(cache_path)
+
+    profile.setPersistentStoragePath(persistent_data_path)
+
     profile.setHttpCacheType(QWebEngineProfile.DiskHttpCache)
     profile.setPersistentCookiesPolicy(QWebEngineProfile.ForcePersistentCookies)
     interceptor = OfflineInterceptor()
