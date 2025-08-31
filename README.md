@@ -9,6 +9,7 @@
 ## Features
 - Works offline, even url based extension
 - Cache whitelist editor (press ctrl + m)
+- Custom addon manager
 
 ## Platform Support
 This project is developed for Windows. Compatibility on Linux or macOS is untested
@@ -16,7 +17,7 @@ This project is developed for Windows. Compatibility on Linux or macOS is untest
 ## How It Works
 Penguinmod Desktop embeds PenguinMod in a PyQt5-based web browser. Any resources loaded through the browser are cached if they are from a whitelisted domain.
 
-## How to use
+## How to use (windows)
 Install the following
 ```bash
 pip install PyQt5 PyQtWebEngine requests
